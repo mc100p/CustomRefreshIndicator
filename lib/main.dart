@@ -39,7 +39,11 @@ class _MyHomePageState extends State<MyHomePage> {
         onNotification: (notification) {
           if (notification.metrics.pixels <= -130 &&
               notification.metrics.atEdge == false) {
-            showCustomRefreshScreen();
+            showCustomRefreshScreen(() async {
+              await Future.delayed(const Duration(seconds: 3), () {
+                print("object");
+              });
+            });
           }
           return true;
         },
@@ -74,11 +78,11 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Future showCustomRefreshScreen() async {
+  Future showCustomRefreshScreen(Future<void> Function() function) async {
     setState(() {
       pulledDownActivated = true;
     });
-    await Future.delayed(const Duration(seconds: 3));
+    await function();
     setState(() {
       pulledDownActivated = false;
     });
